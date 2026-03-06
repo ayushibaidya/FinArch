@@ -1,39 +1,92 @@
 # FinArch
-Versioned REST API for personal finance with PostgreSQL, JWT auth, transactions, and analytics — showcases backend engineering &amp; RDBMS skills.
 
-FinArch
+Versioned REST API for personal finance built with Node.js, Express, and PostgreSQL.
 
-Versioned REST API for Personal Finance Management
-A backend-focused personal finance API built with Node.js, Express, PostgreSQL, showcasing API versioning, relational modeling, JWT authentication, transaction-safe operations, and analytics endpoints. Ideal for demonstrating strong backend engineering and RDBMS skills.
+## Features
 
-✅ Core Features
+- JWT authentication (`/api/v1/auth/register`, `/api/v1/auth/login`)
+- Versioned APIs:
+  - `v1`: CRUD for accounts/categories, transaction create/list
+  - `v2`: analytics endpoints
+- ACID-safe transaction creation with account balance updates
+- SQL migrations and normalized PostgreSQL schema
+- Input validation, auth middleware, centralized error handling
+- Jest + Supertest tests for key endpoints
+- Dockerized app + PostgreSQL via `docker-compose`
 
-User Authentication: JWT-based login & registration
+## Project Structure
 
-Accounts Management: CRUD operations for multiple account types
+```text
+src/
+  config/
+  controllers/
+  middleware/
+  repositories/
+  routes/v1/
+  routes/v2/
+  services/
+  utils/
+  validators/
+migrations/
+scripts/
+tests/
+```
 
-Categories & Transactions: Income/Expense tracking
+## Prerequisites
 
-Transaction-Safe Operations: ACID-compliant balance updates
+- Node.js 20+
+- PostgreSQL 16+ (or Docker)
 
-API Versioning: /api/v1 (CRUD) & /api/v2 (analytics)
+## Environment Variables
 
-Analytics Endpoints: Monthly summaries, category breakdowns
+Copy `.env.example` to `.env` and update values:
 
-Database: PostgreSQL with normalized schema, indexes, and foreign key constraints
+```env
+PORT=3000
+NODE_ENV=development
+DATABASE_URL=postgresql://postgres:postgres@db:5432/finarch
+JWT_SECRET=replace_with_strong_secret
+JWT_EXPIRES_IN=1d
+```
 
-Testing: Jest + Supertest integration tests
+## Run Locally
 
-Dockerized: Easy setup with docker-compose
+```bash
+npm install
+npm run migrate
+npm start
+```
 
-Tech Stack
+## Run Tests
 
-Backend: Node.js, Express
+```bash
+npm test
+```
 
-Database: PostgreSQL
+## Docker
 
-ORM/DB Layer: Prisma / raw SQL
+```bash
+docker compose up --build
+```
 
-Authentication: JWT + bcrypt
+App: `http://localhost:3000`
 
-Testing: Jest + Supertest
+## API Endpoints
+
+### v1
+
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/accounts`
+- `GET /api/v1/accounts`
+- `GET /api/v1/accounts/:id`
+- `DELETE /api/v1/accounts/:id`
+- `POST /api/v1/categories`
+- `GET /api/v1/categories`
+- `POST /api/v1/transactions`
+- `GET /api/v1/transactions?page=1&limit=10&type=expense&startDate=2026-01-01&endDate=2026-01-31`
+
+### v2
+
+- `GET /api/v2/analytics/monthly-summary?from=2026-01-01&to=2026-12-31`
+- `GET /api/v2/analytics/category-breakdown?from=2026-01-01&to=2026-12-31`
