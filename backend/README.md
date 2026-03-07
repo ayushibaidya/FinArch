@@ -14,6 +14,11 @@ Versioned REST API for personal finance built with Node.js, Express, and Postgre
 - Jest + Supertest tests for key endpoints
 - Dockerized app + PostgreSQL via `docker-compose`
 
+## Repository Context
+
+This README is for the backend app in `backend/`.
+Frontend lives separately at `../frontend`.
+
 ## Project Structure
 
 ```text
@@ -52,6 +57,7 @@ JWT_EXPIRES_IN=1d
 ## Run Locally
 
 ```bash
+cd backend
 npm install
 npm run migrate
 npm start
@@ -60,12 +66,14 @@ npm start
 ## Run Tests
 
 ```bash
+cd backend
 npm test
 ```
 
 ## Docker
 
 ```bash
+cd backend
 docker compose up --build
 ```
 
@@ -80,6 +88,8 @@ App: `http://localhost:3000`
 - `POST /api/v1/accounts`
 - `GET /api/v1/accounts`
 - `GET /api/v1/accounts/:id`
+- `PUT /api/v1/accounts/:id`
+- `PATCH /api/v1/accounts/:id`
 - `DELETE /api/v1/accounts/:id`
 - `POST /api/v1/categories`
 - `GET /api/v1/categories`
