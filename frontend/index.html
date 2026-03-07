@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinArch Auth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Prata&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-left" aria-hidden="true"></div>
+    <div class="bg-orb bg-orb-right" aria-hidden="true"></div>
+
+    <main class="container">
+      <header class="hero">
+        <p class="eyebrow">FinArch</p>
+        <h1>Auth & Session Demo</h1>
+        <p class="subtext">Register, login, persist JWT, and access protected API actions.</p>
+      </header>
+
+      <section id="auth-screen" class="panel reveal">
+        <div class="grid">
+          <form id="register-form" class="card">
+            <h2>Register</h2>
+            <label for="register-name">Full Name</label>
+            <input id="register-name" name="fullName" type="text" required minlength="2" />
+
+            <label for="register-email">Email</label>
+            <input id="register-email" name="email" type="email" required />
+
+            <label for="register-password">Password</label>
+            <input id="register-password" name="password" type="password" required minlength="8" />
+
+            <button type="submit">Create Account</button>
+          </form>
+
+          <form id="login-form" class="card">
+            <h2>Login</h2>
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" required />
+
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" required />
+
+            <button type="submit">Sign In</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="app-screen" class="panel hidden reveal">
+        <div class="card">
+          <h2>Session Active</h2>
+          <p id="session-user" class="mono"></p>
+          <div class="actions">
+            <button id="load-protected" type="button">Load Protected Data</button>
+            <button id="logout" type="button" class="secondary">Logout</button>
+          </div>
+          <pre id="protected-output" class="output">No protected data loaded yet.</pre>
+        </div>
+      </section>
+
+      <p id="toast" class="toast" role="status" aria-live="polite"></p>
+    </main>
+
+    <script src="/src/shared/lib/config.js"></script>
+    <script src="/src/shared/lib/http.js"></script>
+    <script src="/src/features/auth/token-storage.js"></script>
+    <script src="/src/features/auth/auth.api.js"></script>
+    <script src="/src/features/auth/session.js"></script>
+    <script src="/src/features/auth/auth.ui.js"></script>
+    <script src="/src/app/init.js"></script>
+  </body>
+</html>
