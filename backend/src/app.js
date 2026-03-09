@@ -4,8 +4,16 @@ const v2Routes = require('./routes/v2');
 const { notFoundHandler, errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
+const cors = require('cors'); 
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: ['http://localhost:5173'], 
+    credentials: true, 
+  }), 
+);
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });

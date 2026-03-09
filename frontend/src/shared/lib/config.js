@@ -1,6 +1,6 @@
 (function bootstrapConfig() {
   window.finarchConfig = {
-    apiBaseUrl: window.location.origin,
+    apiBaseUrl: ' ',
     refreshEndpoint: null,
   };
 })();

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FinArch Auth</title>
+    <title>FinArch Workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,8 +19,8 @@
     <main class="container">
       <header class="hero">
         <p class="eyebrow">FinArch</p>
-        <h1>Auth & Session Demo</h1>
-        <p class="subtext">Register, login, persist JWT, and access protected API actions.</p>
+        <h1>Finance Workspace</h1>
+        <p class="subtext">Auth + Accounts + Categories + Transactions with filters and pagination.</p>
       </header>
 
       <section id="auth-screen" class="panel reveal">
@@ -53,15 +53,196 @@
       </section>
 
       <section id="app-screen" class="panel hidden reveal">
-        <div class="card">
-          <h2>Session Active</h2>
-          <p id="session-user" class="mono"></p>
-          <div class="actions">
-            <button id="load-protected" type="button">Load Protected Data</button>
-            <button id="logout" type="button" class="secondary">Logout</button>
+        <div class="workspace-top card">
+          <div>
+            <h2>Workspace</h2>
+            <p id="session-user" class="mono"></p>
           </div>
-          <pre id="protected-output" class="output">No protected data loaded yet.</pre>
+          <button id="logout" type="button" class="secondary">Logout</button>
         </div>
+
+        <div class="tab-strip">
+          <button class="tab-button active" data-tab="accounts" type="button">Accounts</button>
+          <button class="tab-button" data-tab="categories" type="button">Categories</button>
+          <button class="tab-button" data-tab="transactions" type="button">Transactions</button>
+        </div>
+
+        <section class="tab-panel" data-tab-panel="accounts">
+          <div class="split-grid">
+            <form id="account-form" class="card">
+              <h3 id="account-form-title">Create Account</h3>
+              <label for="account-name">Name</label>
+              <input id="account-name" name="name" type="text" required minlength="2" />
+
+              <label for="account-type">Type</label>
+              <select id="account-type" name="type" required>
+                <option value="checking">checking</option>
+                <option value="savings">savings</option>
+                <option value="cash">cash</option>
+                <option value="credit">credit</option>
+              </select>
+
+              <label for="account-balance">Balance</label>
+              <input id="account-balance" name="balance" type="number" step="0.01" value="0" required />
+
+              <label for="account-currency">Currency</label>
+              <input id="account-currency" name="currency" type="text" value="USD" maxlength="3" required />
+
+              <div class="actions">
+                <button id="account-submit" type="submit">Create</button>
+                <button id="account-cancel-edit" type="button" class="secondary hidden">Cancel Edit</button>
+              </div>
+            </form>
+
+            <div class="card">
+              <h3>Accounts</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Balance</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="accounts-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel hidden" data-tab-panel="categories">
+          <div class="split-grid">
+            <form id="category-form" class="card">
+              <h3>Create Category</h3>
+              <label for="category-name">Name</label>
+              <input id="category-name" name="name" type="text" required minlength="2" />
+
+              <label for="category-type">Type</label>
+              <select id="category-type" name="type" required>
+                <option value="expense">expense</option>
+                <option value="income">income</option>
+              </select>
+
+              <button type="submit">Create Category</button>
+            </form>
+
+            <div class="card">
+              <h3>Categories</h3>
+              <ul id="categories-list" class="list"></ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel hidden" data-tab-panel="transactions">
+          <div class="stack-grid">
+            <form id="transaction-form" class="card">
+              <h3>Create Transaction</h3>
+              <div class="inline-grid">
+                <div>
+                  <label for="tx-account-id">Account</label>
+                  <select id="tx-account-id" name="accountId" required></select>
+                </div>
+                <div>
+                  <label for="tx-category-id">Category</label>
+                  <select id="tx-category-id" name="categoryId" required></select>
+                </div>
+                <div>
+                  <label for="tx-type">Type</label>
+                  <select id="tx-type" name="type" required>
+                    <option value="expense">expense</option>
+                    <option value="income">income</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="tx-amount">Amount</label>
+                  <input id="tx-amount" name="amount" type="number" step="0.01" min="0.01" required />
+                </div>
+                <div>
+                  <label for="tx-date">Date</label>
+                  <input id="tx-date" name="transactionDate" type="date" required />
+                </div>
+                <div>
+                  <label for="tx-description">Description</label>
+                  <input id="tx-description" name="description" type="text" maxlength="160" />
+                </div>
+              </div>
+              <button type="submit">Create Transaction</button>
+            </form>
+
+            <form id="tx-filter-form" class="card">
+              <h3>Filters</h3>
+              <div class="inline-grid">
+                <div>
+                  <label for="filter-type">Type</label>
+                  <select id="filter-type" name="type">
+                    <option value="">all</option>
+                    <option value="expense">expense</option>
+                    <option value="income">income</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="filter-account-id">Account</label>
+                  <select id="filter-account-id" name="accountId">
+                    <option value="">all</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="filter-category-id">Category</label>
+                  <select id="filter-category-id" name="categoryId">
+                    <option value="">all</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="filter-start">Start Date</label>
+                  <input id="filter-start" name="startDate" type="date" />
+                </div>
+                <div>
+                  <label for="filter-end">End Date</label>
+                  <input id="filter-end" name="endDate" type="date" />
+                </div>
+                <div>
+                  <label for="filter-limit">Limit</label>
+                  <select id="filter-limit" name="limit">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+              </div>
+              <div class="actions">
+                <button type="submit">Apply Filters</button>
+                <button id="tx-clear-filters" class="secondary" type="button">Clear</button>
+              </div>
+            </form>
+
+            <div class="card">
+              <h3>Transactions</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Type</th>
+                      <th>Amount</th>
+                      <th>Account</th>
+                      <th>Category</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transactions-table-body"></tbody>
+                </table>
+              </div>
+              <div class="pagination">
+                <button id="tx-prev" type="button" class="secondary">Prev</button>
+                <span id="tx-page-indicator">Page 1 / 1</span>
+                <button id="tx-next" type="button" class="secondary">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
 
       <p id="toast" class="toast" role="status" aria-live="polite"></p>
@@ -72,6 +253,9 @@
     <script src="/src/features/auth/token-storage.js"></script>
     <script src="/src/features/auth/auth.api.js"></script>
     <script src="/src/features/auth/session.js"></script>
+    <script src="/src/features/workspace/workspace.api.js"></script>
+    <script src="/src/features/workspace/workspace.validation.js"></script>
+    <script src="/src/features/workspace/workspace.ui.js"></script>
     <script src="/src/features/auth/auth.ui.js"></script>
     <script src="/src/app/init.js"></script>
   </body>

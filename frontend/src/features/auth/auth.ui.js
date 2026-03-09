@@ -4,8 +4,6 @@
   const registerForm = document.getElementById('register-form');
   const loginForm = document.getElementById('login-form');
   const logoutButton = document.getElementById('logout');
-  const loadProtectedButton = document.getElementById('load-protected');
-  const protectedOutput = document.getElementById('protected-output');
   const sessionUser = document.getElementById('session-user');
   const toast = document.getElementById('toast');
 
@@ -20,14 +18,21 @@
   function showAuthScreen() {
     authScreen.classList.remove('hidden');
     appScreen.classList.add('hidden');
-    protectedOutput.textContent = 'No protected data loaded yet.';
     sessionUser.textContent = '';
+
+    if (window.finarchWorkspace) {
+      window.finarchWorkspace.unmount();
+    }
   }
 
-  function showAppScreen(user) {
+  function showAppScreen(user, token) {
     authScreen.classList.add('hidden');
     appScreen.classList.remove('hidden');
     sessionUser.textContent = `Signed in as: ${user.email}`;
+
+    if (window.finarchWorkspace) {
+      window.finarchWorkspace.mount({ user, token });
+    }
   }
 
   async function onRegisterSubmit(event) {
@@ -78,35 +83,14 @@
     setToast('Logged out.', 'success');
   }
 
-  async function onLoadProtectedData() {
-    const session = window.finarchSession.getSession();
-    if (!session) {
-      setToast('Please login first.', 'error');
-      showAuthScreen();
-      return;
-    }
-
-    try {
-      const accounts = await window.finarchAuthApi.getAccounts(session.token);
-      protectedOutput.textContent = JSON.stringify(accounts, null, 2);
-      setToast('Protected data loaded.', 'success');
-    } catch (error) {
-      if (error.message.toLowerCase().includes('invalid') || error.message.toLowerCase().includes('expired')) {
-        window.finarchSession.clearSession();
-      }
-      setToast(error.message, 'error');
-    }
-  }
-
   function bindEvents() {
     registerForm.addEventListener('submit', onRegisterSubmit);
     loginForm.addEventListener('submit', onLoginSubmit);
     logoutButton.addEventListener('click', onLogout);
-    loadProtectedButton.addEventListener('click', onLoadProtectedData);
 
     window.addEventListener('finarch:session', (event) => {
       if (event.detail.isAuthenticated) {
-        showAppScreen(event.detail.user);
+        showAppScreen(event.detail.user, event.detail.token);
       } else {
         showAuthScreen();
       }
@@ -116,7 +100,7 @@
   function mount() {
     const session = window.finarchSession.getSession();
     if (session) {
-      showAppScreen(session.user);
+      showAppScreen(session.user, session.token);
     } else {
       showAuthScreen();
     }
